@@ -33,13 +33,38 @@
 
 @ Here is the actual ddhimmar3070_lab6 function
 ddhimmar3070_lab6:
-    push {lr}
+    push {r4, r5, r6, lr}
 
-    @ Read the user button state
-    mov r0, #0
+    mov r4, r0          @ Save delay number
+    mov r5, #7          @ LED index starts at 7
+    mov r6, #0          @ Toggle counter starts at 0
+
+lab6_loop:
+    cmp r5, #0
+    bge lab6_toggle
+
+    mov r5, #7          @ Reset index when it results in negative
+
+lab6_toggle:
+    mov r0, r5
+    bl BSP_LED_Toggle
+
+    add r6, r6, #1      @ Increment of the toggle counter
+    sub r5, r5, #1      @ Decrement of the LED index
+
+    mov r0, r4
+    bl busy_delay
+
+    mov r0, #0          @ BUTTON_USER is 0
     bl BSP_PB_GetState
 
-    pop {lr}
+    cmp r0, #0
+    beq lab6_loop       @ Keep looping if button is not pressed
+
+    mov r0, r6          @ Return toggle counter
+
+    pop {r4, r5, r6, lr}
+
     bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
     .size   ddhimmar3070_lab6, .-ddhimmar3070_lab6    @@ - symbol size (not strictly required, but makes the debugger happy)
 

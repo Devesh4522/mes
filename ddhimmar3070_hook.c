@@ -1,5 +1,8 @@
 /*
- * C to assembler menu hook
+ *  C to assembler menu hook
+ *
+ *  Modified by ddhimmar3070
+ * 
  */
 
 #include <stdio.h>
@@ -8,96 +11,59 @@
 
 #include "common.h"
 
-int ddhimmar3070_add_test(int x, int y, int delay);
-int ddhimmar3070_string_test(char *p);
-int ddhimmar3070_a2(int num, int wait); 
+int ddhimmar3070_lab6(int delay);
 
-void AddTest(int action)
+void Lab6_ddhimmar3070(int action)
 {
-    uint32_t delay;
-    int fetch_status;
 
-    if(action==CMD_SHORT_HELP)
-        return;
+  if(action==CMD_SHORT_HELP) return;
+  if(action==CMD_LONG_HELP) {
+    printf("Lab 6\n\n"
+	   "This command tests new lab 6 function by ddhimmar3070\n"
+	   );
 
-    if(action==CMD_LONG_HELP) {
-        printf("Addition Test\n\n"
-               "This command tests new addition function\n");
-        return;
-    }
+    return;
+  }
 
-    fetch_status = fetch_uint32_arg(&delay);
+  uint32_t delay;
+  int fetch_status;
 
-    if(fetch_status) {
-        delay = 0xFFFFFF;
-    }
+  fetch_status = fetch_uint32_arg(&delay);
 
-    printf("ddhimmar3070_add_test returned: %d\n",
-           ddhimmar3070_add_test(99, 87, delay));
+  if (fetch_status) {
+    delay = 1000000;
+  }
+
+  printf("ddhimmar3070_lab6 returned: %d\n", ddhimmar3070_lab6(delay) );
 }
 
-ADD_CMD("ddhimmar3070_add", AddTest,
-        "Test the new add function")
+ADD_CMD("ddhimmar3070_lab6", Lab6_ddhimmar3070,"Test the new lab 6 function")
 
-void ddhimmar3070_StringTest(int action)
+int ddhimmar3070_a3(char *pattern_ptr);
+
+void A3_ddhimmar3070(int action)
 {
-    int fetch_status;
-    char *destptr;
 
-    if(action==CMD_SHORT_HELP)
-        return;
+  if(action==CMD_SHORT_HELP) return;
+  if(action==CMD_LONG_HELP) {
+    printf("Assignment 3 Test\n\n"
+	   "This is the A3 function by ddhimmar3070\n"
+	   );
 
-    if(action==CMD_LONG_HELP) {
-        printf("String Test\n\n"
-               "This command tests new string function by ddhimmar3070\n");
-        return;
-    }
+    return;
+  }
 
-    fetch_status = fetch_string_arg(&destptr);
+  int fetch_status;
+  char *pattern;
 
-    if(fetch_status) {
-        destptr = "TESTING";
-    }
+  fetch_status = fetch_string_arg(&pattern);
 
-    printf("string_test returned: %d\n",
-           ddhimmar3070_string_test(destptr));
+  if (fetch_status) {
+    // Default logic goes here
+    pattern = "Test Pattern";
+  }
+
+  printf("ddhimmar3070_a3 returned: %d\n", ddhimmar3070_a3(pattern) );
 }
 
-ADD_CMD("ddhimmar3070_string", ddhimmar3070_StringTest,
-        "Test the new string function")
-
-        // Assignment 2 C Hook Function
-//
-void _ddhimmar3070_Assignment2(int action)
-{
-    uint32_t count;
-    uint32_t delay;
-    int fetch_status;
-
-    if(action==CMD_SHORT_HELP)
-        return;
-
-    if(action==CMD_LONG_HELP) {
-        printf("Assignment 2\n\n"
-               "This command triggers assignment 2 by ddhimmar3070\n");
-        return;
-    }
-
-    fetch_status = fetch_uint32_arg(&count);
-
-    if(fetch_status) {
-        count = 1;
-    }
-
-    fetch_status = fetch_uint32_arg(&delay);
-
-    if(fetch_status) {
-        delay = 0xFFFFEF;
-    }
-
-    printf("ddhimmar3070_a2 returned: %d\n",
-           ddhimmar3070_a2(count, delay));
-}
-
-ADD_CMD("ddhimmar3070_a2", _ddhimmar3070_Assignment2,
-        "Assignment 2")
+ADD_CMD("ddhimmar3070_a3", A3_ddhimmar3070,"Run A3 for ddhimmar3070")
