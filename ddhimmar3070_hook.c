@@ -5,6 +5,7 @@
  * 
  */
 
+#include "stm32f3_discovery_gyroscope.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <ctype.h>
@@ -38,6 +39,39 @@ void Lab6_ddhimmar3070(int action)
 }
 
 ADD_CMD("ddhimmar3070_lab6", Lab6_ddhimmar3070,"Test the new lab 6 function")
+
+int ddhimmar3070_lab7(void);
+void Lab7_ddhimmar3070(int action)
+{
+
+  if(action==CMD_SHORT_HELP) return;
+  if(action==CMD_LONG_HELP) {
+    printf("Lab 7\n\n"
+	   "This command tests new lab 7 function by ddhimmar3070\n"
+	   );
+
+    return;
+  }
+
+  float xyz[3] = {0};
+
+  BSP_GYRO_GetXYZ(xyz);
+
+  printf("Gyroscope returns:\n"
+    "   X: %f\n"
+    "   Y: %f\n"
+    "   Z: %f\n",
+    xyz[0] / 256,
+    xyz[1] / 256,
+    xyz[2] / 256);
+
+  printf("ddhimmar3070_lab7 returned: %d\n", ddhimmar3070_lab7() );
+
+  
+}
+
+ADD_CMD("ddhimmar3070_lab7", Lab7_ddhimmar3070,"Test the new lab 7 function")
+
 
 int ddhimmar3070_a3(char *pattern_ptr);
 

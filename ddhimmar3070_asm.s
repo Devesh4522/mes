@@ -68,6 +68,31 @@ lab6_toggle:
     bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
     .size   ddhimmar3070_lab6, .-ddhimmar3070_lab6    @@ - symbol size (not strictly required, but makes the debugger happy)
 
+@@ Function Header Block
+
+    .global ddhimmar3070_lab7        @ Make the symbol name for the function visible to the linker
+    .type   ddhimmar3070_lab7, %function   @ Declares that the symbol is a function (not strictly required)
+
+@ Function Declaration : int ddhimmar3070_lab7(int x, int y)
+@
+@ Input: r0, r1 (i.e. r0 holds x, r1 holds y)
+@ Returns: r0
+@ 
+
+@ Here is the actual ddhimmar3070_lab7 function
+ddhimmar3070_lab7:
+    push {lr}
+
+    @ These lines just show that the code is working
+    ldr r0, =0xFFFFF
+    bl busy_delay
+
+    @ Get the state of the user button here.
+    @ Return the result to the calling C function
+
+    pop {lr}
+    bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
+    .size   ddhimmar3070_lab7, .-ddhimmar3070_lab7    @@ - symbol size (not strictly required)
 
 .global ddhimmar3070_a3
 .type   ddhimmar3070_a3, %function
