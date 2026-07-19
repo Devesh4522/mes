@@ -131,6 +131,12 @@ a3_pattern_loop:
     mov r0, r4
     bl busy_delay
 
+mov r0, #0
+bl BSP_PB_GetState
+
+cmp r0, #0
+bne a3_done
+    
     a3_next_character:
     add r5, r5, #1
     b a3_pattern_loop
