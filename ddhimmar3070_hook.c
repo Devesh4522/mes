@@ -122,16 +122,17 @@ char *pattern;
 
 if (fetch_uint32_arg(&wait)) {
   wait = 400000;
+}
 
-  if (fetch_string_arg(&pattern))
+  if (fetch_string_arg(&pattern)) { 
     pattern = "123";
+}
 
-if (fetch_uint32_arg(&num))
+if (fetch_uint32_arg(&num)) {
     num = 2;
-
+}
 printf("ddhimmar3070_a3 returned: %d\n\n",
        ddhimmar3070_a3(wait, pattern, num));
-}
 }
 
 ADD_CMD("ddhimmar3070_a3", A3_ddhimmar3070,"Run A3 for ddhimmar3070")

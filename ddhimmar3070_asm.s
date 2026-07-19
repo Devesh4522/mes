@@ -92,30 +92,13 @@ ddhimmar3070_lab7:
     .size   ddhimmar3070_lab7, .-ddhimmar3070_lab7    @@ - symbol size (not strictly required)
 
 .global ddhimmar3070_a3
+.thumb_func
 .type   ddhimmar3070_a3, %function
 
-@ Function Declaration: int ddhimmar3070_a3(int wait, char *pattern_ptr, int num)
-@ Input:
-@   r0 = wait
-@   r1 = pattern pointer
-@   r2 = number of repeats
-@
-@ Returns:
-@   r0 = number of LED toggles
-
-@ Here is the function
 ddhimmar3070_a3:
-    push {r4-r7, lr}
+mov r0, #1
+bx lr
 
-    mov r4, r0      @ wait
-    mov r5, r1      @ pattern pointer
-    mov r6, r2      @ repeat limit
-    mov r7, #0      @ toggle counter
-
-    mov r0, r7
-
-    pop {r4-r7, lr}
-    bx lr
     .size   ddhimmar3070_a3, .-ddhimmar3070_a3
 
 @ Function Declaration: int busy_delay(int cycles)
