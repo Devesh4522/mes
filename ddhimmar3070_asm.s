@@ -94,15 +94,27 @@ ddhimmar3070_lab7:
 .global ddhimmar3070_a3
 .type   ddhimmar3070_a3, %function
 
-@ Function Declaration: int ddhimmar3070_a3(char *pattern_ptr)
+@ Function Declaration: int ddhimmar3070_a3(int wait, char *pattern_ptr, int num)
+@ Input:
+@   r0 = wait
+@   r1 = pattern pointer
+@   r2 = number of repeats
 @
-@ Input: r0 (i.e. r0 is a pointer to the first character of the pattern)
-@ Returns: r0
-@ 
+@ Returns:
+@   r0 = number of LED toggles
 
 @ Here is the function
 ddhimmar3070_a3:
+    push {r4-r7, lr}
 
+    mov r4, r0      @ wait
+    mov r5, r1      @ pattern pointer
+    mov r6, r2      @ repeat limit
+    mov r7, #0      @ toggle counter
+
+    mov r0, r7
+
+    pop {r4-r7, lr}
     bx lr
     .size   ddhimmar3070_a3, .-ddhimmar3070_a3
 
