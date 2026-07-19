@@ -103,31 +103,35 @@ void Lab7_ddhimmar3070(int action)
 ADD_CMD("ddhimmar3070_lab7", Lab7_ddhimmar3070,"Test the new lab 7 function")
 
 
-int ddhimmar3070_a3(char *pattern_ptr);
+int ddhimmar3070_a3(uint32_t wait, char *pattern_ptr, uint32_t num );
 
 void A3_ddhimmar3070(int action)
 {
+    if(action==CMD_SHORT_HELP) return;
 
-  if(action==CMD_SHORT_HELP) return;
-  if(action==CMD_LONG_HELP) {
-    printf("Assignment 3 Test\n\n"
-	   "This is the A3 function by ddhimmar3070\n"
-	   );
+    if(action==CMD_LONG_HELP) {
+        printf("Assignment 3\n\n"
+               "Usage:\n"
+               "ddhimmar3070_a3 wait pattern num\n");
+        return;
+    }
 
-    return;
-  }
+uint32_t wait;
+uint32_t num;
+char *pattern;
 
-  int fetch_status;
-  char *pattern;
+if (fetch_uint32_arg(&wait)) {
+  wait = 400000;
 
-  fetch_status = fetch_string_arg(&pattern);
+  if (fetch_string_arg(&pattern))
+    pattern = "123";
 
-  if (fetch_status) {
-    // Default logic goes here
-    pattern = "Test Pattern";
-  }
+if (fetch_uint32_arg(&num))
+    num = 2;
 
-  printf("ddhimmar3070_a3 returned: %d\n", ddhimmar3070_a3(pattern) );
+printf("ddhimmar3070_a3 returned: %d\n\n",
+       ddhimmar3070_a3(wait, pattern, num));
+}
 }
 
 ADD_CMD("ddhimmar3070_a3", A3_ddhimmar3070,"Run A3 for ddhimmar3070")
