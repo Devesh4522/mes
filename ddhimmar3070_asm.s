@@ -95,9 +95,43 @@ ddhimmar3070_lab7:
 .thumb_func
 .type   ddhimmar3070_a3, %function
 
+.global ddhimmar3070_a3
+.thumb_func
+.type ddhimmar3070_a3, %function
+
 ddhimmar3070_a3:
-mov r0, #1
-bx lr
+    push {r4-r7, lr}
+    sub sp, sp, #4
+
+    mov r4, r0
+    mov r5, r1
+    mov r6, r2
+    mov r7, #0
+
+    ldrb r0, [r5]
+    cmp r0, #0
+    beq a3_first_done
+
+    sub r0, r0, #'0'
+
+    cmp r0, #0
+    blt a3_first_done
+
+    cmp r0, #7
+    bgt a3_first_done
+
+    bl BSP_LED_Toggle
+
+    add r7, r7, #1
+
+    mov r0, r4
+    bl busy_delay
+
+a3_first_done:
+    mov r0, r7
+
+    add sp, sp, #4
+    pop {r4-r7, pc}
 
     .size   ddhimmar3070_a3, .-ddhimmar3070_a3
 
