@@ -108,17 +108,18 @@ ddhimmar3070_a3:
     mov r6, r2
     mov r7, #0
 
-    ldrb r0, [r5]
-    cmp r0, #0
-    beq a3_first_done
+a3_pattern_loop:
+    ldrb r0, [r5]       @Read current character
+    cmp r0, #0          @End of string
+    beq a3_pattern_done
 
     sub r0, r0, #'0'
 
     cmp r0, #0
-    blt a3_first_done
+    blt a3_next_character
 
     cmp r0, #7
-    bgt a3_first_done
+    bgt a3_next_character
 
     bl BSP_LED_Toggle
 
@@ -127,7 +128,11 @@ ddhimmar3070_a3:
     mov r0, r4
     bl busy_delay
 
-a3_first_done:
+a3_next_character:
+add r5, r5, #1
+    b a3_pattern_loop
+
+    a3_pattern_done:
     mov r0, r7
 
     add sp, sp, #4
