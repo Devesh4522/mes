@@ -67,9 +67,17 @@ void Lab7_ddhimmar3070(int action)
     delay = 0xFFFFF;
   }
 
+  uint32_t axis;
+  int fetch_axis_status = fetch_uint32_arg(&axis);
+
+  if (fetch_axis_status) {
+    axis = 0;
+  }
+
   float xyz [3] = {0};
   for (uint32_t i = 0; i < count; i++) {
     BSP_GYRO_GetXYZ(xyz);
+    if (axis == 0) {
     printf("Gyroscope returns;\n"
            "X: %f\n"
            "Y: %f\n"
@@ -77,10 +85,20 @@ void Lab7_ddhimmar3070(int action)
            xyz[0] / 256,
            xyz[1] / 256,
            xyz[2] / 256);
+    }
+    else if (axis == 1) {
+      printf("X: %f\n", xyz[0] / 256);
+    }
+    else if (axis == 2) {
+      printf("Y: %f\n", xyz[1] / 256);
+    }
+    else if (axis == 3) {
+      printf("Z: %f\n", xyz[2] / 256);
+    }
 
            printf("ddhimmar3070_lab7 returned: %d\n", ddhimmar3070_lab7(delay) );
   }
-  }
+}
 
 ADD_CMD("ddhimmar3070_lab7", Lab7_ddhimmar3070,"Test the new lab 7 function")
 
