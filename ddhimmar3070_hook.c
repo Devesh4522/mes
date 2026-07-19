@@ -40,7 +40,7 @@ void Lab6_ddhimmar3070(int action)
 
 ADD_CMD("ddhimmar3070_lab6", Lab6_ddhimmar3070,"Test the new lab 6 function")
 
-int ddhimmar3070_lab7(void);
+int ddhimmar3070_lab7(int delay);
 void Lab7_ddhimmar3070(int action)
 {
 
@@ -53,22 +53,34 @@ void Lab7_ddhimmar3070(int action)
     return;
   }
 
-  float xyz[3] = {0};
+  uint32_t count;
+  int fetch_count_status = fetch_uint32_arg(&count);
 
-  BSP_GYRO_GetXYZ(xyz);
+  if (fetch_count_status) {
+    count = 10;
+  }
 
-  printf("Gyroscope returns:\n"
-    "   X: %f\n"
-    "   Y: %f\n"
-    "   Z: %f\n",
-    xyz[0] / 256,
-    xyz[1] / 256,
-    xyz[2] / 256);
+  uint32_t delay;
+  int fetch_delay_status = fetch_uint32_arg(&delay);
 
-  printf("ddhimmar3070_lab7 returned: %d\n", ddhimmar3070_lab7() );
+  if (fetch_delay_status) {
+    delay = 0xFFFFF;
+  }
 
-  
-}
+  float xyz [3] = {0};
+  for (uint32_t i = 0; i < count; i++) {
+    BSP_GYRO_GetXYZ(xyz);
+    printf("Gyroscope returns;\n"
+           "X: %f\n"
+           "Y: %f\n"
+           "Z: %f\n",
+           xyz[0] / 256,
+           xyz[1] / 256,
+           xyz[2] / 256);
+
+           printf("ddhimmar3070_lab7 returned: %d\n", ddhimmar3070_lab7(delay) );
+  }
+  }
 
 ADD_CMD("ddhimmar3070_lab7", Lab7_ddhimmar3070,"Test the new lab 7 function")
 

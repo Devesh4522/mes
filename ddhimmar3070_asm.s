@@ -73,18 +73,15 @@ lab6_toggle:
     .global ddhimmar3070_lab7        @ Make the symbol name for the function visible to the linker
     .type   ddhimmar3070_lab7, %function   @ Declares that the symbol is a function (not strictly required)
 
-@ Function Declaration : int ddhimmar3070_lab7(int x, int y)
+@ Function Declaration : int ddhimmar3070_lab7(int delay)
 @
-@ Input: r0, r1 (i.e. r0 holds x, r1 holds y)
+@ Input: r0 (i.e. r0 holds the delay value)
 @ Returns: r0
 @ 
 
 @ Here is the actual ddhimmar3070_lab7 function
 ddhimmar3070_lab7:
     push {lr}
-
-    @ These lines just show that the code is working
-    ldr r0, =0xFFFFF
     bl busy_delay
 
     @ Get the state of the user button here.
