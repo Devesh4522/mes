@@ -1,4 +1,7 @@
-@ Test code for my own new function called from C
+@ Assembly File - Lab 8 Version
+@
+@ NOTE THERE IS A DATA SECTION AT THE END OF THIS FILE FOR ASSIGNMENT 4
+@ USE THAT DATA SECTION FOR ANY DATA YOU NEED, DO NOT ADD ANOTHER.
 
 @ This is a comment. Anything after an @ symbol is ignored.
 @@ This is also a comment. Some people use double @@ symbols. 
@@ -17,147 +20,155 @@
     .syntax unified         @ Sets the instruction set to the new unified ARM + THUMB
                             @ instructions. The default is divided (separate instruction sets)
 
-    .global ddhimmar3070_lab6        @ Make the symbol name for the function visible to the linker
+    .global ddhimmar3070_lab8        @ Make the symbol name for the function visible to the linker
 
     .code   16              @ 16bit THUMB code (BOTH .code and .thumb_func are required)
     .thumb_func             @ Specifies that the following symbol is the name of a THUMB
                             @ encoded function. Necessary for interlinking between ARM and THUMB code.
 
-    .type   ddhimmar3070_lab6, %function   @ Declares that the symbol is a function (not strictly required)
+    .type   ddhimmar3070_lab8, %function   @ Declares that the symbol is a function (not strictly required)
 
-@ Function Declaration : int ddhimmar3070_lab6(int x, int y)
+@ Function Declaration : void ddhimmar3070_lab8(void)
 @
-@ Input: r0, r1 (i.e. r0 holds x, r1 holds y)
-@ Returns: r0
+@ Input: none
+@ Returns: nothing
 @ 
 
-@ Here is the actual ddhimmar3070_lab6 function
-ddhimmar3070_lab6:
-    push {r4, r5, r6, lr}
+@ Here is the actual ddhimmar3070_lab8 function
+ddhimmar3070_lab8:
+    push {lr}
 
-    mov r4, r0          @ Save delay number
-    mov r5, #7          @ LED index starts at 7
-    mov r6, #0          @ Toggle counter starts at 0
-
-lab6_loop:
-    cmp r5, #0
-    bge lab6_toggle
-
-    mov r5, #7          @ Reset index when it results in negative
-
-lab6_toggle:
-    mov r0, r5
+    @ For now, this function just toggles, delays, and toggles again.
+    mov r0, #3
     bl BSP_LED_Toggle
 
-    add r6, r6, #1      @ Increment of the toggle counter
-    sub r5, r5, #1      @ Decrement of the LED index
-
-    mov r0, r4
+    ldr r0, =0xFFFFFFF
     bl busy_delay
 
-    mov r0, #0          @ BUTTON_USER is 0
-    bl BSP_PB_GetState
-
-    cmp r0, #0
-    beq lab6_loop       @ Keep looping if button is not pressed
-
-    mov r0, r6          @ Return toggle counter
-
-    pop {r4, r5, r6, lr}
-
-    bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
-    .size   ddhimmar3070_lab6, .-ddhimmar3070_lab6    @@ - symbol size (not strictly required, but makes the debugger happy)
-
-@@ Function Header Block
-
-    .global ddhimmar3070_lab7        @ Make the symbol name for the function visible to the linker
-    .type   ddhimmar3070_lab7, %function   @ Declares that the symbol is a function (not strictly required)
-
-@ Function Declaration : int ddhimmar3070_lab7(int delay)
-@
-@ Input: r0 (i.e. r0 holds the delay value)
-@ Returns: r0
-@ 
-
-@ Here is the actual ddhimmar3070_lab7 function
-ddhimmar3070_lab7:
-    push {lr}
-    bl busy_delay
-
-    @ Get the state of the user button here.
-    @ Return the result to the calling C function
+    mov r0, #3
+    bl BSP_LED_Toggle
 
     pop {lr}
     bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
-    .size   ddhimmar3070_lab7, .-ddhimmar3070_lab7    @@ - symbol size (not strictly required)
+    .size   ddhimmar3070_lab8, .-ddhimmar3070_lab8    @@ - symbol size (not strictly required, but makes the debugger happy)
 
-.global ddhimmar3070_a3
-.thumb_func
-.type   ddhimmar3070_a3, %function
 
-.global ddhimmar3070_a3
-.thumb_func
-.type ddhimmar3070_a3, %function
 
-ddhimmar3070_a3:
-    push {r4-r7, lr}
-    sub sp, sp, #4
 
-    mov r4, r0
-    mov r5, r1
-    mov r6, r2
-    mov r7, #0
+.global ddhimmar3070_a4
+.type   ddhimmar3070_a4, %function
 
-str r1, [sp]            @ Store beginning of pattern
-cmp r6, #0
-beq a3_done
+@ Function Declaration : int ddhimmar3070_a4(int x)
+@
+@ Input: Document this
+@ Returns: Document this
+@ 
 
-a3_pattern_loop:
-    ldrb r0, [r5]       @Read current character
-    cmp r0, #0          @End of string
-    beq a3_repeat_complete
+@ Here is the actual function
+ddhimmar3070_a4:
 
-    sub r0, r0, #'0'
+    @ This function only exists to start / initialize your A4
+    @ logic working. No actions should be taken in this logic,
+    @ aside from storing the parameters your A4 logic needs to run.
 
+    @ Store the value we received indicating the running state
+    ldr r1, =a4_is_running
+    str r0, [r1]
+
+    bx lr
+    .size   ddhimmar3070_a4, .-ddhimmar3070_a4
+
+
+.global ddhimmar3070_a4_btn
+.type   ddhimmar3070_a4_btn, %function
+
+@ Function Declaration : void ddhimmar3070_a4_btn(void)
+@
+@ Input: None
+@ Returns: Nothing
+@ 
+@ Reminder - this requires the button has been initialized as an interrupt
+@ in main.c using BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI)
+@ as well as requires a new function set up void EXTI0_IRQHandler(void)
+
+@ Here is the actual function
+ddhimmar3070_a4_btn:
+    push {lr}
+
+    ldr r1, =a4_button_count        @ Get the address of the counter
+    ldr r0, [r1]                    @ Get the actual count
+    add r0, r0, #1                  @ Increment the count
+    and r0, #7                      @ Keep the count between 0 and 7
+    str r0, [r1]                    @ Store the new count
+
+    bl BSP_LED_Toggle               @ Toggle the current LED
+
+    pop {lr}
+    bx lr
+    .size   ddhimmar3070_a4_btn, .-ddhimmar3070_a4_btn
+
+
+.global ddhimmar3070_a4_tick
+.type   ddhimmar3070_a4_tick, %function
+
+@ Function Declaration : void ddhimmar3070_a4_tick(void)
+@
+@ Input: None
+@ Returns: Nothing
+@ 
+
+@ Here is the actual function
+ddhimmar3070_a4_tick:
+    push {lr}
+
+    @ As a starting point, this function implements the basics needed
+    @ to determine if our A4 logic should be running.
+    @
+    @ You will have to add logic here for A4.
+
+    @ Some useful notes
+    @
+    @ BSP_LED_On, BSP_LED_Off - same argument as BSP_LED_Toggle, sets
+    @ the LED to ON or OFF as you tell it
+    @
+    @ How to delay: DO NOT use busy_delay - remember, this is an interrupt
+    @ handler. If you need a delay, use a counter to count how many times
+    @ this function has been called, and use that to skip a desired number
+    @ of calls.
+
+
+    @ ***** Get something
+    ldr r1, =a4_is_running
+    ldr r0, [r1]
+
+    @ ***** Check something
     cmp r0, #0
-    blt a3_next_character
+    ble a4_skip
 
-    cmp r0, #7
-    bgt a3_next_character
+        @ This part below is skipped if A4 is NOT running. You will want to
+        @ keep all your A4 logic inside here.
+        @ DO NOT PUT LOGIC FOR A4 ABOVE THIS LINE -----------------------------
 
-    bl BSP_LED_Toggle
-    add r7, r7, #1
+        @ Even within this logic, you should still take a philosopy of check
+        @ things, do things, and store things - do not use delays of any sort,
+        @ and only use loops if they are bounded (that is, guaranteed to end)
 
-    mov r0, r4
-    bl busy_delay
+        @ ***** Do something
+        mov r0, #0
+        bl BSP_LED_Toggle
 
-mov r0, #0
-bl BSP_PB_GetState
+        @ DO NOT PUT LOGIC FOR A4 BELOW THIS LINE -----------------------------
+        @ End of A4 skipped logic. Do not add logic below here.
 
-cmp r0, #0
-bne a3_done
-    
-    a3_next_character:
-    add r5, r5, #1
-    b a3_pattern_loop
+    a4_skip:
 
-     a3_repeat_complete:
-  sub r6, r6, #1
-    cmp r6, #0
-    beq a3_done
+    @ ***** End of our tick function
+    pop {lr}
+    bx lr
+    .size   ddhimmar3070_a4_tick, .-ddhimmar3070_a4_tick
 
-    ldr r5, [sp]
-    b a3_pattern_loop
 
-    a3_done:
-    mov r0, r7
-
-    add sp, sp, #4
-    pop {r4-r7, pc}
-
-    .size   ddhimmar3070_a3, .-ddhimmar3070_a3
-
-@ Function Declaration: int busy_delay(int cycles)
+@ Function Declaration : int busy_delay(int cycles)
 @
 @ Input: r0 (i.e. r0 is how many cycles to delay)
 @ Returns: r0
@@ -176,6 +187,13 @@ busy_delay:
 
     pop {r6}
     bx lr               @ Return to calling function
+
+
+@ Here is another data section, we will use it for some key interrupt items
+@ We will put all necessary data for A4 in this block
+.data
+a4_is_running: .word 0
+a4_button_count: .word 0
 
 
 @ Assembly file ended by single .end directive on its own line

@@ -1,2 +1,0 @@
-# mes
-Assignment-2
