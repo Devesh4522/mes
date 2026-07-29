@@ -53,6 +53,29 @@ ddhimmar3070_lab8:
     .size   ddhimmar3070_lab8, .-ddhimmar3070_lab8    @@ - symbol size (not strictly required, but makes the debugger happy)
 
 
+@@ Function Header Block
+
+    .global ddhimmar3070_lab9        @ Make the symbol name for the function visible to the linker
+    .type   ddhimmar3070_lab9, %function   @ Declares that the symbol is a function (not strictly required)
+
+@ Function Declaration : int ddhimmar3070_lab9(void)
+@
+@ Input: None
+@ Returns: r0
+@ 
+
+@ Here is the actual ddhimmar3070_lab9 function
+ddhimmar3070_lab9:
+    push {lr}
+
+    @ These lines just show that the code is working
+    mov r0, #0
+    bl BSP_LED_Toggle
+
+    mov r0, #0
+    pop {lr}
+    bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
+    .size   ddhimmar3070_lab9, .-ddhimmar3070_lab9    @@ - symbol size (not strictly required)
 
 
 .global ddhimmar3070_a4

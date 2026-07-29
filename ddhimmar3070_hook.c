@@ -81,6 +81,29 @@ void Lab8_ddhimmar3070(int action)
 
 ADD_CMD("ddhimmar3070_lab8", Lab8_ddhimmar3070,"Test the new lab 8 function")
 
+
+
+int ddhimmar3070_lab9(void);
+
+void Lab9_ddhimmar3070(int action)
+{
+
+  if(action==CMD_SHORT_HELP) return;
+  if(action==CMD_LONG_HELP) {
+    printf("Lab 9\n\n"
+	   "This command tests new lab 9 function by ddhimmar3070\n"
+	   );
+
+    return;
+  }
+
+  printf("ddhimmar3070_lab9 returned: %d\n", ddhimmar3070_lab9() );
+
+  
+}
+
+ADD_CMD("ddhimmar3070_lab9", Lab9_ddhimmar3070,"Test the new lab 9 function")
+
 int ddhimmar3070_a4(int x);
 
 void A4_ddhimmar3070(int action)
