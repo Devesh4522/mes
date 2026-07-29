@@ -72,7 +72,8 @@ ldr r1, =0x48001014
  
     ldrh r0, [r1]
 
-    orr r0, r0, #0x0100
+   ldr r2, =0xAA00
+   orr r0, r0, r2
 
     strh r0, [r1]
 
