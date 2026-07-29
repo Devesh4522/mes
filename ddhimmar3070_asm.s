@@ -68,13 +68,18 @@ ddhimmar3070_lab8:
 ddhimmar3070_lab9:
     push {lr}
 
-    @ These lines just show that the code is working
-    mov r0, #0
-    bl BSP_LED_Toggle
+ldr r1, =0x48001014
+ 
+    ldrh r0, [r1]
+
+    orr r0, r0, #0x0100
+
+    strh r0, [r1]
 
     mov r0, #0
     pop {lr}
-    bx lr                           @ Return (Branch eXchange) to the address in the link register (lr) 
+    bx lr
+
     .size   ddhimmar3070_lab9, .-ddhimmar3070_lab9    @@ - symbol size (not strictly required)
 
 
