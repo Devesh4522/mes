@@ -73,8 +73,8 @@ ldr r1, =0x48001014
     ldrh r0, [r1]
 
    ldr r2, =0xAA00
-   orr r0, r0, r2
-
+   eor r0, r0, r2
+   
     strh r0, [r1]
 
     mov r0, #0
