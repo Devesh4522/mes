@@ -166,7 +166,7 @@ ddhimmar3070_a4_btn:
 
 @ Here is the actual function
 ddhimmar3070_a4_tick:
-    push {lr}
+    push {r4, lr}
 
     @ As a starting point, this function implements the basics needed
     @ to determine if our A4 logic should be running.
@@ -218,13 +218,32 @@ ddhimmar3070_a4_tick:
 
 a4_take_action:
 
-        @ Reset skip counter
-        mov r2, #0
-        str r2, [r1]
+    @ Reset skip counter
+    ldr r1, =a4_skip_count
+    mov r2, #0
+    str r2, [r1]
 
-        @ Toggle LED 0
-        mov r0, #0
-        bl BSP_LED_Toggle
+   @ Load current LED
+ldr r1, =a4_current_led
+ldr r4, [r1]
+
+@ Toggle current LED
+mov r0, r4
+bl BSP_LED_Toggle
+
+@ Load direction
+ldr r2, =a4_direction
+ldr r2, [r2]
+
+@ Move to next/previous LED
+add r4, r4, r2
+
+@ Keep LED between 0 and 7
+and r4, r4, #7
+
+@ Reload the address because BSP_LED_Toggle may change r1
+ldr r1, =a4_current_led
+str r4, [r1]
 
         @ DO NOT PUT LOGIC FOR A4 BELOW THIS LINE -----------------------------
         @ End of A4 skipped logic. Do not add logic below here.
@@ -232,7 +251,7 @@ a4_take_action:
     a4_skip:
 
     @ ***** End of our tick function
-    pop {lr}
+    pop {r4, lr}
     bx lr
     .size   ddhimmar3070_a4_tick, .-ddhimmar3070_a4_tick
 
