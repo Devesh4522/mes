@@ -200,7 +200,29 @@ ddhimmar3070_a4_tick:
         @ things, do things, and store things - do not use delays of any sort,
         @ and only use loops if they are bounded (that is, guaranteed to end)
 
-        @ ***** Do something
+       ldr r1, =a4_skip_count
+       ldr r2, [r1]
+
+        @ Load the requested skip count
+        ldr r3, =a4_num_to_skip
+        ldr r3, [r3]
+
+        @ Check if it is time to toggle
+        cmp r2, r3
+        bge a4_take_action
+
+        @ Not yet - increment counter and exit
+        add r2, r2, #1
+        str r2, [r1]
+        b a4_skip
+
+a4_take_action:
+
+        @ Reset skip counter
+        mov r2, #0
+        str r2, [r1]
+
+        @ Toggle LED 0
         mov r0, #0
         bl BSP_LED_Toggle
 
