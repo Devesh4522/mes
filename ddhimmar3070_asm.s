@@ -95,33 +95,57 @@ ldr r1, =0x48001014
 
 @ Here is the actual function
 ddhimmar3070_a4:
+    push {r4, lr}
 
     @ r0 = status
     @ r1 = num_to_skip
     @ r2 = direction
 
-    @ Store running state
+    @ Save running status
     ldr r3, =a4_is_running
     str r0, [r3]
 
-    @ Store number of ticks to skip
+    @ Save number of ticks to skip
     ldr r3, =a4_num_to_skip
     str r1, [r3]
 
-    @ Store direction
+    @ Direction 0 means keep the previous direction
+    cmp r2, #0
+    beq a4_keep_direction
+
+    @ Save new direction
     ldr r3, =a4_direction
     str r2, [r3]
+
+a4_keep_direction:
+
+    @ If status is zero or negative, stop and return
+    cmp r0, #0
+    ble a4_function_end
 
     @ Reset skip counter
     ldr r3, =a4_skip_count
     mov r0, #0
     str r0, [r3]
 
-    @ Reset current LED
+    @ Reset current LED to 0
     ldr r3, =a4_current_led
-    mov r0, #0
     str r0, [r3]
 
+    @ Turn off all 8 LEDs
+    mov r4, #0
+
+a4_led_off_loop:
+    mov r0, r4
+    bl BSP_LED_Off
+
+    add r4, r4, #1
+    cmp r4, #8
+    blt a4_led_off_loop
+
+a4_function_end:
+    mov r0, #0
+    pop {r4, lr}
     bx lr
     .size   ddhimmar3070_a4, .-ddhimmar3070_a4
 

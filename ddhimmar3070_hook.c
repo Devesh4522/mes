@@ -118,11 +118,11 @@ void A4_ddhimmar3070(int action)
     }
 
     int fetch_status;
-    uint32_t a4_status;
+    int32_t a4_status;
     uint32_t a4_num_to_skip;
     int32_t a4_direction;
 
-    fetch_status = fetch_uint32_arg(&a4_status);
+    fetch_status = fetch_int32_arg(&a4_status);
 
     if(fetch_status != 0) {
         a4_status = 1;
