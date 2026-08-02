@@ -96,13 +96,31 @@ ldr r1, =0x48001014
 @ Here is the actual function
 ddhimmar3070_a4:
 
-    @ This function only exists to start / initialize your A4
-    @ logic working. No actions should be taken in this logic,
-    @ aside from storing the parameters your A4 logic needs to run.
+    @ r0 = status
+    @ r1 = num_to_skip
+    @ r2 = direction
 
-    @ Store the value we received indicating the running state
-    ldr r1, =a4_is_running
-    str r0, [r1]
+    @ Store running state
+    ldr r3, =a4_is_running
+    str r0, [r3]
+
+    @ Store number of ticks to skip
+    ldr r3, =a4_num_to_skip
+    str r1, [r3]
+
+    @ Store direction
+    ldr r3, =a4_direction
+    str r2, [r3]
+
+    @ Reset skip counter
+    ldr r3, =a4_skip_count
+    mov r0, #0
+    str r0, [r3]
+
+    @ Reset current LED
+    ldr r3, =a4_current_led
+    mov r0, #0
+    str r0, [r3]
 
     bx lr
     .size   ddhimmar3070_a4, .-ddhimmar3070_a4
@@ -221,8 +239,13 @@ busy_delay:
 @ Here is another data section, we will use it for some key interrupt items
 @ We will put all necessary data for A4 in this block
 .data
-a4_is_running: .word 0
+a4_is_running:   .word 0
 a4_button_count: .word 0
+
+a4_num_to_skip:  .word 0
+a4_direction:    .word 1
+a4_skip_count:   .word 0
+a4_current_led:  .word 0
 
 
 @ Assembly file ended by single .end directive on its own line

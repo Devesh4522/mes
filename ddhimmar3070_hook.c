@@ -104,33 +104,45 @@ void Lab9_ddhimmar3070(int action)
 
 ADD_CMD("ddhimmar3070_lab9", Lab9_ddhimmar3070,"Test the new lab 9 function")
 
-int ddhimmar3070_a4(int x);
+int ddhimmar3070_a4(int status, int num_to_skip, int direction);
 
 void A4_ddhimmar3070(int action)
 {
+    if(action == CMD_SHORT_HELP) return;
 
-  if(action==CMD_SHORT_HELP) return;
-  if(action==CMD_LONG_HELP) {
-    printf("Assignment 4 Test\n\n"
-	   "This command tests new A4 function by ddhimmar3070\n"
-	   );
+    if(action == CMD_LONG_HELP) {
+        printf("Assignment 4 Test\n\n"
+               "This command tests new A4 function by ddhimmar3070\n"
+               "Usage: ddhimmar3070_a4 status num_to_skip direction\n");
+        return;
+    }
 
-    return;
-  }
+    int fetch_status;
+    uint32_t a4_status;
+    uint32_t a4_num_to_skip;
+    int32_t a4_direction;
 
-  int fetch_status;
-  uint32_t a4_start;
+    fetch_status = fetch_uint32_arg(&a4_status);
 
-  fetch_status = fetch_uint32_arg(&a4_start);
+    if(fetch_status != 0) {
+        a4_status = 1;
+    }
 
-  if (fetch_status) {
-    a4_start = 1;
-  }
+    fetch_status = fetch_uint32_arg(&a4_num_to_skip);
 
+    if(fetch_status != 0) {
+        a4_num_to_skip = 1000;
+    }
 
-  printf("ddhimmar3070_a4 returned: %d\n", ddhimmar3070_a4(a4_start) );
+    fetch_status = fetch_int32_arg(&a4_direction);
+
+    if(fetch_status != 0) {
+        a4_direction = 1;
+    }
+
+    printf("ddhimmar3070_a4 returned: %d\n",
+           ddhimmar3070_a4(a4_status, a4_num_to_skip, a4_direction));
 }
 
-ADD_CMD("ddhimmar3070_a4", A4_ddhimmar3070,"Test the A4 function")
-
-
+ADD_CMD("ddhimmar3070_a4", A4_ddhimmar3070,
+        "Test the A4 function")
