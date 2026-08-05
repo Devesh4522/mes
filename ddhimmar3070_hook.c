@@ -104,6 +104,33 @@ void Lab9_ddhimmar3070(int action)
 
 ADD_CMD("ddhimmar3070_lab9", Lab9_ddhimmar3070,"Test the new lab 9 function")
 
+void mes_InitIWDG(int reload);
+void mes_IWDGStart(void);
+void mes_IWDGRefresh(void);
+
+void Lab10_ddhimmar3070(int action)
+{
+
+  if(action==CMD_SHORT_HELP) return;
+  if(action==CMD_LONG_HELP) {
+    printf("Lab 10\n\n"
+	   "This command tests new lab 8 function by ddhimmar3070\n"
+	   );
+
+    return;
+  }
+
+  printf("Initializing Watchdog\n");
+  mes_InitIWDG(9999);
+
+  printf("Starting Watchdog\n");
+  mes_IWDGStart();
+  
+}
+
+ADD_CMD("ddhimmar3070_lab10", Lab10_ddhimmar3070,"Test the new lab 10 function")
+
+
 int ddhimmar3070_a4(int status, int num_to_skip, int direction);
 
 void A4_ddhimmar3070(int action)
@@ -131,7 +158,7 @@ void A4_ddhimmar3070(int action)
     fetch_status = fetch_uint32_arg(&a4_num_to_skip);
 
     if(fetch_status != 0) {
-        a4_num_to_skip = 1000;
+        a4_num_to_skip = 0;
     }
 
     fetch_status = fetch_int32_arg(&a4_direction);
