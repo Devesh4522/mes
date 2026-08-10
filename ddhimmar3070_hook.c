@@ -120,8 +120,17 @@ void Lab10_ddhimmar3070(int action)
     return;
   }
 
+      int fetch_status;
+    uint32_t reload;
+
+    fetch_status = fetch_uint32_arg(&reload);
+
+    if(fetch_status != 0) {
+        reload = 9999;
+    }
+
   printf("Initializing Watchdog\n");
-  mes_InitIWDG(9999);
+  mes_InitIWDG(reload);
 
   printf("Starting Watchdog\n");
   mes_IWDGStart();
