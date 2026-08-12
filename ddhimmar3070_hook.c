@@ -16,7 +16,7 @@
 #define N 500
 
 // A4 Interrupt Handlers - these are in ddhimmar3070_asm.s
-void ddhimmar3070_a4_btn(void);
+void ddhimmar3070_a5_btn(void);
 void ddhimmar3070_a5_tick(void);
 
 
@@ -58,7 +58,7 @@ void ddhimmar3070_tick(void)
 void ddhimmar3070_btn(void)
 {
   // For now, just toggle an LED to prove the button press was noticed.
-  ddhimmar3070_a4_btn();
+  ddhimmar3070_a5_btn();
 }
 
 int ddhimmar3070_lab8(void);

@@ -13,7 +13,7 @@
     .text                   @ Tell the assembler that the upcoming section is to be considered
                             @ assembly language instructions - Code section (text -> ROM)
 
-@@ Function Header Block
+@@ Function Header Blockmm
     .align  2               @ Code alignment - 2^n alignment (n=2)
                             @ This causes the assembler to use 4 byte alignment
 
@@ -240,6 +240,26 @@ ddhimmar3070_a4_btn:
     bx lr
     .size   ddhimmar3070_a4_btn, .-ddhimmar3070_a4_btn
 
+.global ddhimmar3070_a5_btn
+.type   ddhimmar3070_a5_btn, %function
+
+@ Function Declaration : void ddhimmar3070_a5_btn(void)
+@
+@ Input: None
+@ Returns: Nothing
+@
+@ Sets the A5 button pressed flag to 1.
+ddhimmar3070_a5_btn:
+    push {lr}
+
+    mov r0, #1
+    ldr r1, =a5_btn_pressed
+    str r0, [r1]
+
+    pop {lr}
+    bx lr
+
+.size ddhimmar3070_a5_btn, .-ddhimmar3070_a5_btn
 
 .global ddhimmar3070_a4_tick
 .type   ddhimmar3070_a4_tick, %function
@@ -360,8 +380,17 @@ ddhimmar3070_a5_tick:
     cmp r0, #0
     ble a5_skip
 
-     @ Refresh watchdog while A5 is running
-     bl mes_IWDGRefresh
+       @ Check if the button has been pressed
+    ldr r1, =a5_btn_pressed
+    ldr r0, [r1]
+
+    cmp r0, #0
+    bne a5_skip_watchdog
+
+    @ Refresh watchdog only if button was not pressed
+    bl mes_IWDGRefresh
+
+a5_skip_watchdog:
 
     @ Toggle Upper Left, Upper Right, Lower Left and Lower Right LEDs
     @ directly through the GPIOE output data register
@@ -417,6 +446,8 @@ a5_num_to_skip:  .word 0
 a5_direction:    .word 1
 a5_skip_count:   .word 0
 a5_current_led:  .word 0
+
+a5_btn_pressed:  .word 0
 
 
 @ Assembly file ended by single .end directive on its own line
