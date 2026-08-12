@@ -352,9 +352,15 @@ ddhimmar3070_a5_tick:
     cmp r0, #0
     ble a5_skip
 
-    @ Temporary test for A5
-    mov r0, #0
-    bl BSP_LED_Toggle
+    @ Toggle Upper Left, Upper Right, Lower Left and Lower Right LEDs
+    @ directly through the GPIOE output data register
+    ldr r1, =0x48001014
+    ldrh r0, [r1]
+
+    ldr r2, =0x5500
+    eor r0, r0, r2
+
+    strh r0, [r1]
 
 a5_skip:
     pop {lr}
