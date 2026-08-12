@@ -198,6 +198,14 @@ a5_keep_direction:
     str r0, [r3]
 
 a5_function_end:
+
+ @ Initialize watchdog with reload value 8000
+    ldr r0, =8000
+    bl mes_InitIWDG
+
+    @ Start watchdog
+    bl mes_IWDGStart
+
     mov r0, #0
     pop {r4, lr}
     bx lr
