@@ -149,6 +149,60 @@ a4_function_end:
     bx lr
     .size   ddhimmar3070_a4, .-ddhimmar3070_a4
 
+.global ddhimmar3070_a5
+.type   ddhimmar3070_a5, %function
+
+@ Function Declaration : int ddhimmar3070_a5(int status, int num_to_skip, int direction)
+@
+@ Input:
+@   r0 = status
+@   r1 = num_to_skip
+@   r2 = direction
+@
+@ Returns:
+@   r0 = 0
+@
+@ Here is the actual function
+ddhimmar3070_a5:
+    push {r4, lr}
+
+    @ Save running status
+    ldr r3, =a5_running
+    str r0, [r3]
+
+    @ Save number of ticks to skip
+    ldr r3, =a5_num_to_skip
+    str r1, [r3]
+
+    @ Direction 0 means keep the previous direction
+    cmp r2, #0
+    beq a5_keep_direction
+
+    @ Save new direction
+    ldr r3, =a5_direction
+    str r2, [r3]
+
+a5_keep_direction:
+
+    @ If status is zero or negative, stop and return
+    cmp r0, #0
+    ble a5_function_end
+
+    @ Reset skip counter
+    ldr r3, =a5_skip_count
+    mov r0, #0
+    str r0, [r3]
+
+    @ Reset current LED to 0
+    ldr r3, =a5_current_led
+    str r0, [r3]
+
+a5_function_end:
+    mov r0, #0
+    pop {r4, lr}
+    bx lr
+
+.size ddhimmar3070_a5, .-ddhimmar3070_a5
 
 .global ddhimmar3070_a4_btn
 .type   ddhimmar3070_a4_btn, %function
@@ -279,6 +333,35 @@ str r4, [r1]
     bx lr
     .size   ddhimmar3070_a4_tick, .-ddhimmar3070_a4_tick
 
+    .global ddhimmar3070_a5_tick
+.type ddhimmar3070_a5_tick, %function
+
+@ Function Declaration : void ddhimmar3070_a5_tick(void)
+@
+@ Input: None
+@ Returns: Nothing
+@
+@ Here is the actual function
+ddhimmar3070_a5_tick:
+    push {lr}
+
+    @ Check whether A5 is running
+    ldr r1, =a5_running
+    ldr r0, [r1]
+
+    cmp r0, #0
+    ble a5_skip
+
+    @ Temporary test for A5
+    mov r0, #0
+    bl BSP_LED_Toggle
+
+a5_skip:
+    pop {lr}
+    bx lr
+
+.size ddhimmar3070_a5_tick, .-ddhimmar3070_a5_tick
+
 
 @ Function Declaration : int busy_delay(int cycles)
 @
@@ -311,6 +394,12 @@ a4_num_to_skip:  .word 0
 a4_direction:    .word 1
 a4_skip_count:   .word 0
 a4_current_led:  .word 0
+
+a5_running:      .word 0
+a5_num_to_skip:  .word 0
+a5_direction:    .word 1
+a5_skip_count:   .word 0
+a5_current_led:  .word 0
 
 
 @ Assembly file ended by single .end directive on its own line
