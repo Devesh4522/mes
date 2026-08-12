@@ -360,6 +360,9 @@ ddhimmar3070_a5_tick:
     cmp r0, #0
     ble a5_skip
 
+     @ Refresh watchdog while A5 is running
+     bl mes_IWDGRefresh
+
     @ Toggle Upper Left, Upper Right, Lower Left and Lower Right LEDs
     @ directly through the GPIOE output data register
     ldr r1, =0x48001014
